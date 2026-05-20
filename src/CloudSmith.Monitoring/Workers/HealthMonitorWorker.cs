@@ -5,6 +5,7 @@ using CloudSmith.Monitoring.Alerts;
 using CloudSmith.Monitoring.Health;
 using CloudSmith.Monitoring.Metrics;
 using CloudSmith.Sdk;
+using CloudSmith.Sdk.Events;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
