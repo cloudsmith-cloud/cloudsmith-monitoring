@@ -38,9 +38,9 @@ public sealed class HttpHealthProbe
                 : ComponentHealthStatus.Degraded;
 
             return new ComponentHealthResult(componentName, componentType, status,
-                description: $"HTTP {(int)response.StatusCode}",
-                checkedAt: DateTimeOffset.UtcNow,
-                duration: sw.Elapsed);
+                Description:$"HTTP {(int)response.StatusCode}",
+                CheckedAt: DateTimeOffset.UtcNow,
+                Duration: sw.Elapsed);
         }
         catch (Exception ex)
         {
@@ -49,9 +49,9 @@ public sealed class HttpHealthProbe
                 componentName, ex.Message);
             return new ComponentHealthResult(componentName, componentType,
                 ComponentHealthStatus.Unhealthy,
-                description: ex.Message,
-                checkedAt: DateTimeOffset.UtcNow,
-                duration: sw.Elapsed);
+                Description:ex.Message,
+                CheckedAt: DateTimeOffset.UtcNow,
+                Duration: sw.Elapsed);
         }
     }
 }
