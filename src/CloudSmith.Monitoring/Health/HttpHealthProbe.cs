@@ -28,6 +28,22 @@ public sealed class HttpHealthProbe
         CancellationToken ct = default)
     {
         var sw = Stopwatch.StartNew();
+
+        // AB#2348 / BUG-4: skip probe when URL is missing or not absolute, instead of
+        // logging "invalid request URI" once per cycle. Return Unknown so aggregation
+        // does not flag a missing endpoint as Unhealthy (a missing portal URL on PaaS,
+        // for instance, is expected — the portal lives in a separate ACA).
+        if (string.IsNullOrWhiteSpace(healthUrl)
+            || !Uri.TryCreate(healthUrl, UriKind.Absolute, out _))
+        {
+            sw.Stop();
+            return new ComponentHealthResult(componentName, componentType,
+                ComponentHealthStatus.Unknown,
+                Description:"Not configured — no absolute URL set for this component.",
+                CheckedAt: DateTimeOffset.UtcNow,
+                Duration: sw.Elapsed);
+        }
+
         try
         {
             var response = await _http.GetAsync(healthUrl, ct);
