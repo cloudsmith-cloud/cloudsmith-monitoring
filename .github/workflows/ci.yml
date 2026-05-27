@@ -22,10 +22,13 @@ jobs:
       package-id: 'CloudSmith.Modules.Monitoring'
       pre-release: true
     secrets: inherit
-  openapi:
-    if: github.ref == 'refs/heads/main'
-    needs: [build-test]
-    uses: cloudsmith-cloud/cloudsmith-workflows/.github/workflows/openapi-publish.yml@v1.0.0
-    with:
-      module-name: 'cloudsmith-monitoring'
-    secrets: inherit
+  # cloudsmith-monitoring is a NuGet library, not an API host — no OpenAPI spec to publish.
+  # The openapi-publish workflow requires api-project-path which monitoring does not have.
+  # Disabled to fix the long-standing startup_failure (since 2026-05-20).
+  # openapi:
+  #   if: github.ref == 'refs/heads/main'
+  #   needs: [build-test]
+  #   uses: cloudsmith-cloud/cloudsmith-workflows/.github/workflows/openapi-publish.yml@v1.0.0
+  #   with:
+  #     module-name: 'cloudsmith-monitoring'
+  #   secrets: inherit
